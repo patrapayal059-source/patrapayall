@@ -1,59 +1,64 @@
+
+
+
 from flask import Flask, request, jsonify
-from library_management.libraryA import Library  # import your existing code
+from library_management.libraryA import Library
+from library_management.create1 import CreateBook
+from library_management.read import ReadBook
+from library_management.update1 import UpdateBook
+from library_management.delete1 import DeleteBook
 
 app = Flask(__name__)
-library = Library()  # use your DB-based library system
+
+# MAIN LIBRARY OBJECT
+library = Library()
+
+# CREATE CRUD CLASS OBJECTS
+create_book = CreateBook(library.books, library._save_books)
+read_book = ReadBook(library.books)
+update_book = UpdateBook(library.books, library._save_books)
+delete_book = DeleteBook(library.books, library._save_books)
 
 
-@app.route("/books", methods=["GET"])
-def get_books():
-    conn = library._connect()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM books")
-    rows = cursor.fetchall()
-    conn.close()
-
-    books = [{
-        "title": row[0],
-        "author": row[1],
-        "isbn": row[2],
-        "available": bool(row[3])
-    } for row in rows]
-
-    return jsonify(books)
-
-
-@app.route("/books", methods=["POST"])
-def add_book():
+# CREATE
+@app.route("/create", methods=["POST"])
+def create_route():
     data = request.json
     title = data.get("title")
     author = data.get("author")
     isbn = data.get("isbn")
 
-    library.add_book(title, author, isbn)
-    return jsonify({"message": "Book added successfully!"})
+    result = create_book.add_book(title, author, isbn)
+    return jsonify({"message": result})
 
 
-@app.route("/books/<isbn>/borrow", methods=["PUT"])
-def borrow_book(isbn):
-    library.borrow_book(isbn)
-    return jsonify({"message": "Borrow request processed."})
+# READ (find book)
+@app.route("/read/<isbn>", methods=["GET"])
+def read_route(isbn):
+    result = read_book.find_book(isbn)
+    return jsonify(result)
 
 
-@app.route("/books/<isbn>/return", methods=["PUT"])
-def return_book(isbn):
-    library.return_book(isbn)
-    return jsonify({"message": "Return request processed."})
+# UPDATE - borrow
+@app.route("/update/borrow/<isbn>", methods=["PUT"])
+def borrow_route(isbn):
+    result = update_book.borrow_book(isbn)
+    return jsonify({"message": result})
 
 
-@app.route("/books/<isbn>", methods=["DELETE"])
-def delete_book(isbn):
-    library.delete_book(isbn)
-    return jsonify({"message": "Book deleted if it existed."})
+# UPDATE - return
+@app.route("/update/return/<isbn>", methods=["PUT"])
+def return_route(isbn):
+    result = update_book.return_book(isbn)
+    return jsonify({"message": result})
 
 
-# ------------------------
-# Run SERVER with a PORT
-# ------------------------
+# DELETE
+@app.route("/delete/<isbn>", methods=["DELETE"])
+def delete_route(isbn):
+    result = delete_book.delete_book(isbn)
+    return jsonify({"message": result})
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)  # <<< SERVER RUNNING ON PORT 5000
+    app.run(host="0.0.0.0", port=5001, debug=True)

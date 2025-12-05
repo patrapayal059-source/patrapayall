@@ -1,18 +1,12 @@
  # UPDATE
-def borrow_book(self, isbn):
-        for book in self.books:
-            if book.isbn == isbn and book.available:
-                book.available = False
-                self._save_books()
-                print(f"Book with ISBN {isbn} borrowed successfully.")
-                return
-        print(f"Book with ISBN {isbn} not found or already borrowed.")
+class UpdateBook:
+    def __init__(self, books, save_callback):
+        self.books = books
+        self._save_books = save_callback
 
-def return_book(self, isbn):
-        for book in self.books:
-            if book.isbn == isbn and not book.available:
-                book.available = True
-                self._save_books()
-                print(f"Book with ISBN {isbn} returned successfully.")
-                return
-        print(f"Book with ISBN {isbn} not found or not currently borrowed.")
+    def borrow_book(self, isbn):
+        ...
+
+    def return_book(self, isbn):
+        ...
+

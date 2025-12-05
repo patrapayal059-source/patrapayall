@@ -109,25 +109,34 @@ def main():
             author = input("Enter author: ")
             isbn = input("Enter ISBN: ")
             library.add_book(title, author, isbn)
+
         elif choice == '2':
             library.list_all_books()
+
         elif choice == '3':
             search_term = input("Enter title, author, or ISBN to search: ")
             library.find_book(search_term)
+
         elif choice == '4':
             isbn = input("Enter ISBN of the book to borrow: ")
             library.borrow_book(isbn)
+
         elif choice == '5':
             isbn = input("Enter ISBN of the book to return: ")
             library.return_book(isbn)
+
         elif choice == '6':
             isbn = input("Enter ISBN of the book to delete: ")
             library.delete_book(isbn)
+
         elif choice == '7':
             print("Exiting Library Management System.")
             break
+
         else:
             print("Invalid choice. Please try again.")
 
-    if __name__ == "__main__":
-        main()
+
+
+if __name__ == "__main__":
+    main()
