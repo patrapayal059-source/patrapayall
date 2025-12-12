@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Library Management</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Library Management</h1>
+
+  <section>
+    <h2 id="form-title">Add Book</h2>
+    <form id="book-form">
+      <input type="hidden" id="book-id">
+
+      <label>Title</label>
+      <input id="title" required>
+
+      <label>Author</label>
+      <input id="author" required>
+
+      <label>ISBN</label>
+      <input id="isbn" required>
+
+      <label>Year</label>
+      <input id="year" type="number">
+
+      <button type="submit">Save</button>
+      <button id="cancel-edit" type="button" style="display:none">Cancel</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Books</h2>
+    <input id="search" placeholder="search...">
+    <ul id="books-list"></ul>
+  </section>
+
+  <script src="api.js"></script>
+  <script src="booksController.js"></script>
+</body>
+</html>
